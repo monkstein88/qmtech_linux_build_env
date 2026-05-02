@@ -6,3 +6,7 @@
 	path = SOURCES/u-boot-socfpga
 	url = https://github.com/monkstein88/u-boot-socfpga.git
 	branch = socfpga_v2024.07_qmtech_c5soc_kfb_dual_sdram
+[submodule "SOURCES/linux-socfpga"]
+	path = SOURCES/linux-socfpga
+	url = https://github.com/monkstein88/linux-socfpga.git
+	branch = socfpga-6.6.22-lts_qmtech_c5soc_kfb_dual_sdram
