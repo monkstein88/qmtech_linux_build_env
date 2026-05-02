@@ -19,7 +19,7 @@ export UBOOT_BUILD_DIR="$BUILD_TOP_FOLDER/BUILD/u-boot-socfpga"
 export LINUX_BUILD_DIR="$BUILD_TOP_FOLDER/BUILD/linux-socfpga"
 
 # This must be adjusted/configured to reference the actual SD Card Device:
-export SDCARD_DEVICE=/dev/sdb
+export SDCARD_DEV=/dev/sdb
 
 # Get the sources from the handoff folder, format them appropriately, and copy them into the U-Boot source code:
 cd $UBOOT_SRC_DIR/arch/arm/mach-socfpga/cv_bsp_generator
@@ -143,11 +143,11 @@ sudo python3 $BUILD_ENV_FOLDER/scripts/make_sdimage_p3.py -f \
 
 # Write the image file directly to the SD Card:
 cd $BUILD_ENV_FOLDER/sd_card
-sudo dd if=sdcard_cv.img of=$SDCARD_DEVICE bs=512 conv=sync
+sudo dd if=sdcard_cv.img of=$SDCARD_DEV bs=512 conv=sync
 sync
-sudo umount $SDCARD_DEVICE*
+sudo umount $SDCARD_DEV*
 sync
-sudo eject $SDCARD_DEVICE
+sudo eject $SDCARD_DEV
 sync
 
 
@@ -430,6 +430,13 @@ cyclone5 login: root  # Just enter 'root' that is the username, there is no pass
 # root@cyclone5:~#
 
 
+cd $UBOOT_BUILD_DIR
+sudo dd if=u-boot-with-spl.sfp of=${SDCARD_DEV}3 bs=512 conv=sync
+sync
+sudo sfdisk --part-type $SDCARD_DEV 3 a2   # ← add this
+sync
+sudo parted --script $SDCARD_DEV set 1 boot on
+sync
 
 # Here is a code snippet of commands you can run to create the partitions, set the partition type, and format the partitions.
 export SDCARD_DEVICE=/dev/sdb
