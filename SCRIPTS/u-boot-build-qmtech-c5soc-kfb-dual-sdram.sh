@@ -15,6 +15,9 @@ export UBOOT_SRC_DIR="$BUILD_TOP_FOLDER/SOURCES/u-boot-socfpga"                 
 export LINUX_SRC_DIR="$BUILD_TOP_FOLDER/SOURCES/linux-socfpga"                    # 'socfpga-6.6.22-lts' branch  (take the latest commit)
 export ROOTFS_SRC_DIR="$BUILD_TOP_FOLDER/SOURCES/rootfs-socfpga"                  # 'main' branch (take the latest commit)
 
+export UBOOT_BUILD_DIR="$BUILD_TOP_FOLDER/BUILD/u-boot-socfpga"
+export LINUX_BUILD_DIR="$BUILD_TOP_FOLDER/BUILD/linux-socfpga"
+
 # This must be adjusted/configured to reference the actual SD Card Device:
 export SDCARD_DEVICE=/dev/sdb
 
@@ -25,13 +28,15 @@ git clean -f # remove the extra generated .pyc files from the run of the 'cv_bsp
 
 # Compile/Build Preloaded + Uboot
 cd $UBOOT_SRC_DIR
+rm -rf $UBOOT_BUILD_DIR
+mkdir $UBOOT_BUILD_DIR -p
 make mrproper
 sync
 make clean
 sync
-make socfpga_c5soc_kfb_dual_sdram_defconfig
+make O=$UBOOT_BUILD_DIR socfpga_c5soc_kfb_dual_sdram_defconfig
 sync
-make -j 8 
+make O=$UBOOT_BUILD_DIR -j 8 
 sync
 # The following ()important) files were generated sucesfully:
 #  ...
