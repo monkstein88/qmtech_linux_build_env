@@ -73,6 +73,18 @@ sync
 rm -rf $LINUX_BUILD_DIR/modules_install/lib/modules/*/source
 sync
 
+# Prepare the configuration and start building the rootfs (using Yoctoy/poky)
+cd $ROOTFS_SRC_DIR/cyclone5
+source poky/oe-init-build-env ./build
+echo 'MACHINE = "cyclone5"' >> conf/local.conf
+echo 'hostname:pn-base-files = "qmtech-c5soc-kfb"' >> conf/local.conf  # Yocto 3.4+ (kirkstone and above) syntax
+echo 'BBLAYERS += " ${TOPDIR}/../meta-intel-fpga "' >> conf/bblayers.conf
+# Uncomment next line to add more packages to the image
+echo 'CORE_IMAGE_EXTRA_INSTALL += "openssh gdbserver"' >> conf/local.conf
+bitbake base-files
+bitbake core-image-minimal
+sync
+
 # Start preparing/linking the produced binaries
 cd $BUILD_ENV_FOLDER
 rm -rf linux-bin && mkdir linux-bin
@@ -84,18 +96,9 @@ ln -s $LINUX_TOP_FOLDER/arch/arm/boot/zImage $LINUX_BIN_DIR/a9/
 ln -s $LINUX_TOP_FOLDER/arch/arm/boot/Image $LINUX_BIN_DIR/a9/
 ln -s $LINUX_TOP_FOLDER/arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_kfb_dual_sdram.dtb $LINUX_BIN_DIR/a9/
 ln -s $LINUX_TOP_FOLDER/modules_install/lib/modules $LINUX_BIN_DIR/a9/
-sync
-
-# Prepare the configuration and start building the rootfs (using Yoctoy/poky)
-cd $ROOTFS_TOP_FOLDER/cyclone5
-source poky/oe-init-build-env ./build
-echo 'MACHINE = "cyclone5"' >> conf/local.conf
-echo 'BBLAYERS += " ${TOPDIR}/../meta-intel-fpga "' >> conf/bblayers.conf
-# Uncomment next line to add more packages to the image
-echo 'CORE_IMAGE_EXTRA_INSTALL += "openssh gdbserver"' >> conf/local.conf
-bitbake core-image-minimal
 ln -s $ROOTFS_TOP_FOLDER/cyclone5/build/tmp/deploy/images/cyclone5/core-image-minimal-cyclone5.tar.gz $LINUX_BIN_DIR/a9/
 sync
+
 
 # Go to the script folder and prepare SD Card image writer script 
 cd $BUILD_ENV_FOLDER/scripts 
