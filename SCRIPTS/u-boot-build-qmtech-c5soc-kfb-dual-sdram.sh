@@ -51,28 +51,26 @@ sync
 #  OFCHK   .config
 
 
-cd $LINUX_TOP_FOLDER
+cd $LINUX_SRC_DIR
 # Note that most Cyclone V SoC DevKits have a 512MB QSPI flash device, while the Linux kernel DTS assumes a 1Gb (128MB) one. 
 # If you have the standard 512MB one, change the file linux-socfpga/arch/arm/boot/dts/socfpga_cyclone5_socdk.dts accordingly before building dtbs:
-export PATH=/home/monklp/workspace/arm-gnu-toolchain-15.2.rel1-x86_64-arm-none-linux-gnueabihf/bin:$PATH
-export ARCH=arm
-export CROSS_COMPILE=arm-none-linux-gnueabihf-
 # Configure and build the Linux binaries - zImage , .dtb and kernel modules
-rm -rf modules_install/
+rm -rf $LINUX_SRC_DIR/modules_install/
+rm -rf $LINUX_BUILD_DIR
 sync
 make mrproper
 sync
 make clean
 sync
-make socfpga_defconfig
+make O=$LINUX_BUILD_DIR socfpga_defconfig
 sync
-make -j 8 zImage Image dtbs modules
+make O=$LINUX_BUILD_DIR -j 8 zImage Image dtbs modules
 sync
-make -j 8 modules_install INSTALL_MOD_PATH=modules_install
+make O=$LINUX_BUILD_DIR -j 8 modules_install INSTALL_MOD_PATH=modules_install
 sync
-rm -rf modules_install/lib/modules/*/build
+rm -rf $LINUX_BUILD_DIR/modules_install/lib/modules/*/build
 sync
-rm -rf modules_install/lib/modules/*/source
+rm -rf $LINUX_BUILD_DIR/modules_install/lib/modules/*/source
 sync
 
 # Start preparing/linking the produced binaries
@@ -139,7 +137,7 @@ sudo python3 $BUILD_ENV_FOLDER/scripts/make_sdimage_p3.py -f \
 -P sdfs/*,num=1,format=fat32,size=100M \
 -P rootfs/*,num=2,format=ext3,size=300M \
 -s 512M \
--n sdcard_cv.img
+-n sdcard_c5soc.img
 
 # Write the image file directly to the SD Card:
 cd $BUILD_ENV_FOLDER/sd_card
