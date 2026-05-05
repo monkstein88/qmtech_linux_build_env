@@ -75,7 +75,7 @@ rm -rf $LINUX_BUILD_DIR/modules_install/lib/modules/*/source
 sync
 
 # Prepare the configuration and start building the rootfs (using Yoctoy/poky)
-cd $ROOTFS_SRC_DIR/cyclone5
+cd $ROOTFS_SRC_DIR/qmtech-c5soc-kfb
 source poky/oe-init-build-env ./build
 echo 'MACHINE = "cyclone5"' >> conf/local.conf
 echo 'hostname:pn-base-files = "qmtech-c5soc-kfb"' >> conf/local.conf  # Yocto 3.4+ (kirkstone and above) syntax
