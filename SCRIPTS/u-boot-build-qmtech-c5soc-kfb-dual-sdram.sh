@@ -77,6 +77,7 @@ sync
 # Prepare the configuration and start building the rootfs (using Yoctoy/poky)
 cd $ROOTFS_SRC_DIR/qmtech-c5soc-kfb
 source poky/oe-init-build-env ./build
+cd $ROOTFS_SRC_DIR/qmtech-c5soc-kfb/build
 echo 'MACHINE = "cyclone5"' >> conf/local.conf
 echo 'hostname:pn-base-files = "qmtech-c5soc-kfb"' >> conf/local.conf  # Yocto 3.4+ (kirkstone and above) syntax
 echo 'BBLAYERS += " ${TOPDIR}/../meta-intel-fpga "' >> conf/bblayers.conf
@@ -84,7 +85,11 @@ echo 'BBLAYERS += " ${TOPDIR}/../meta-intel-fpga "' >> conf/bblayers.conf
 echo 'CORE_IMAGE_EXTRA_INSTALL += "openssh gdbserver"' >> conf/local.conf
 # Redirect ALL build output to a separate directory
 echo 'TMPDIR = "${ROOTFS_BUILD_DIR}"' >> conf/local.conf
+cd ${ROOTFS_BUILD_DIR}/..
+rm -rf ${ROOTFS_BUILD_DIR}
+sync
 bitbake base-files
+sync
 bitbake core-image-base
 sync
 
