@@ -14,14 +14,15 @@ To access the UART shell console on the QMTECH Cyclone V SoC KFB board:
 ### Software Configuration
 ```bash
 # On Linux/Mac, use minicom, screen, or picocom
-minicom -D /dev/ttyUSB0 -b 115200
+minicom -D /dev/ttyUSBx -b 115200
 
 # Or with screen
-screen /dev/ttyUSB0 115200
+screen /dev/ttyUSBx 115200
 
 # Or with picocom
-picocom -b 115200 /dev/ttyUSB0
+picocom -b 115200 /dev/ttyUSBx
 ```
+Where 'x' is the port number of your serial connection
 
 ### Baud Rate
 - **115200 bps** (8 data bits, 1 stop bit, no parity)
