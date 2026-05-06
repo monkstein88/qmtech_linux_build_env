@@ -1,0 +1,2 @@
+# Ignore the wholesome .img file for SD Card flashing
+/SD_CARD/*.img
