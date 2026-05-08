@@ -130,6 +130,10 @@ echo "LABEL Linux Default" > extlinux/extlinux.conf
 echo "    KERNEL ../zImage" >> extlinux/extlinux.conf
 echo "    FDT ../socfpga_cyclone5_kfb_dual_sdram.dtb" >> extlinux/extlinux.conf
 echo "    APPEND root=/dev/mmcblk0p2 rw rootwait earlycon console=ttyS0,115200n8" >> extlinux/extlinux.conf
+# Copy the generated FPGA configuration (.rbf) file from Quartus, to the sdfs dir for SD Card. Then rename it to common used name (standard) - 'soc_system.rbf'
+cp $GHRD_SRC_DIR/quartus/output_files/qmtech_c5soc_kfb_dual_sdram_ghrd.rbf .
+mv qmtech_c5soc_kfb_dual_sdram_ghrd.rbf soc_system.rbf
+
 # Prepare Rootfs partition:
 cd $SDCARD_TOP_FOLDER #
 sudo rm -rf rootfs
@@ -154,10 +158,11 @@ sudo python3 $BUILD_SCRIPT_DIR/make_sdimage_p3.py -f \
 -P rootfs/*,num=2,format=ext3,size=300M \
 -s 512M \
 -n sdcard_qmtech_c5soc_kfb.img
+sync
 
 # Write the image file directly to the SD Card:
 cd $SDCARD_TOP_FOLDER #
-sudo dd if=sdcard_qmtech_c5soc_kfb.img of=$SDCARD_DEV bs=512 conv=sync
+sudo dd if=sdcard_qmtech_c5soc_kfb.img of=$SDCARD_DEV bs=512 conv=sync status=progress
 sync
 sudo umount $SDCARD_DEV*
 sync
@@ -165,7 +170,8 @@ sudo eject $SDCARD_DEV
 sync
 
 # Break the SD Card image file into 100MB chunks and zip it for easier sharing:
-zip -s 100m sdcard_qmtech_c5soc_kfb.zip sdcard_qmtech_c5soc_kfb.img
+rm -rf sdcard_qmtech_c5soc_kfb.img.zip
+zip -s 100m sdcard_qmtech_c5soc_kfb.img.zip sdcard_qmtech_c5soc_kfb.img
 
 
 # ====== Put the SD Card in the QMTECH Cyclone V SoC KFB Dual SDRAM board, SD card slot, and power it up. The board will to Linux login shell: ===
