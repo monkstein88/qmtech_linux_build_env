@@ -449,5 +449,15 @@ zip -s 100m sdcard_qmtech_c5soc_kfb.img.zip sdcard_qmtech_c5soc_kfb.img
 # root@qmtech-c5soc-kfb:~#
 
 
+# Uboot stuff: 
+# u-boot.txt
+fatls mmc 0:1
+load mmc 0:1 ${loadaddr} soc_system.rbf;
+fpga load 0 ${loadaddr} $filesize;
+
+#
+CONFIG_BOOTCOMMAND="load mmc 0:1 ${loadaddr} soc_system.rbf && fpga load 0 ${loadaddr} $filesize; sysboot mmc 0:1 any ${scriptaddr} /extlinux/extlinux.conf"
+
+
 
 
