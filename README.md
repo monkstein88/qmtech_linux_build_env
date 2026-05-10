@@ -1,6 +1,7 @@
 # qmtech-c5soc-kfb-linux-build-env
 
-This is just an environemnt containint the scripts, recipes, directories, etc. to build the entire Linux image (uboot + Linux binaries + SD Card image) for the QMTECH Cyclone V SoC KFB with Dual SDRAM
+This is just an environemnt containint the scripts, recipes, directories, etc. to build the entire Linux image (uboot + Linux binaries + SD Card image) for the QMTECH Cyclone V SoC KFB with Dual SDRAM.
+Note: The Quartus project is set to produce/generate uncompressed bit stream .sof and .rbf files, with Configuration Mode Fast Passive Parallel x 16. Thus, MSEL DIP SW [4:0] must be set to '00000' (All must be ON).
 
 ## UART Shell Console
 
@@ -10,6 +11,7 @@ To access the UART shell console on the QMTECH Cyclone V SoC KFB board:
 - Connect a USB-to-UART adapter to the UART pins on the board
 - Common pins: TX, RX, and GND
 - Ensure proper voltage levels (typically 3.3V for this board)
+- Note that MSEL DIP SW [4:0] = '00000' (All must be set to 'ON').
 
 ### Software Configuration
 ```bash
