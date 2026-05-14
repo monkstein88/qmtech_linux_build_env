@@ -1,7 +1,9 @@
 # qmtech-c5soc-kfb-linux-build-env
 
 This is just an environment comprising of scripts, recipes, directories, source files, etc., to build the entire Linux image (U-Boot + Linux binaries + SD Card image) for the QMTECH Cyclone V SoC KFB with Dual SDRAM. The steps on how to build the whole set of files/folders/etc. and finally, the .img file to write to an SD Card containing the whole Linux image + FPGA configuration, is described in the 'u-boot-build-qmtech-c5soc-kfb-dual-sdram.sh' file in the 'SCRIPTS' folder. 
+
 Note: the .sh (bash script) file is not a script to be run directly/fully; It is to be read and copied (use portions of it) manually, and is just to provide general information and instructions on how to achieve the result (.img file) by following a step process. 
+
 Note: The Quartus project (in 'SOURCES/qmtech-c5soc-kfb-dual-sdram-ghrd') is set to produce/generate uncompressed bit stream .sof and .rbf files, with Configuration Mode Fast Passive Parallel x 16. Thus, MSEL DIP SW [4:0] must be set to '00000' (All must be ON).
 
 ## UART Shell Console
